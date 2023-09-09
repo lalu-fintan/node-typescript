@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import Category from "../models/categoryModel";
 
 export const createCategory = async (req: Request, res: Response) => {
-  const { category } = req.body;
+  const { category, description } = req.body;
   try {
-    const newCategory = await Category.create({ category });
+    const newCategory = await Category.create({ category, description });
     res.status(200).json(newCategory);
   } catch (error) {
     res.status(500).json(error);

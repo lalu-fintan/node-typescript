@@ -4,17 +4,24 @@ import Category from "../models/categoryModel";
 
 export const createQuestion = async (req: Request, res: Response) => {
   const { question, answers, category } = req.body;
-  console.log(req.body);
 
   try {
     const getCategory = await Category.findOne({ category });
-    console.log(getCategory);
     const questions = await Question.create({
       question,
       answers,
       category: getCategory,
     });
-    console.log(questions);
+
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const bulkUploadQuestions = async (req: Request, res: Response) => {
+  try {
+    const questions = await Question.insertMany(req.body);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);
@@ -24,7 +31,7 @@ export const createQuestion = async (req: Request, res: Response) => {
 export const getQuestion = async (req: Request, res: Response) => {
   try {
     const questions = await Question.find();
-    console.log(questions);
+
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);
@@ -34,8 +41,8 @@ export const getQuestion = async (req: Request, res: Response) => {
 export const getQuestionByCategory = async (req: Request, res: Response) => {
   try {
     const { categoryid } = req.params;
-    const questions = await Question.find({ category: categoryid });
-    console.log(questions);
+    const questions = await Question.findOne({ category: categoryid });
+
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);

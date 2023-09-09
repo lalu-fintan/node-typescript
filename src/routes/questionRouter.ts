@@ -1,5 +1,6 @@
 import { authMiddleware } from "../middleware/authMiddleware";
 import {
+  bulkUploadQuestions,
   createQuestion,
   deleteQuestion,
   getQuestion,
@@ -14,6 +15,7 @@ const router = Router();
 // router.route("/:id").put().delete();
 
 router.post("/", createQuestion);
+router.post("/bulk", bulkUploadQuestions);
 router.get("/", getQuestion);
 router.get("/:categoryid", getQuestionByCategory);
 router.put("/:id", updateQuestion);

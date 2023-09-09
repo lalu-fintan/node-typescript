@@ -7,7 +7,7 @@ const questionSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     answers: [
       {
         option: {
@@ -20,7 +20,6 @@ const questionSchema = new mongoose.Schema(
         },
       },
     ],
-    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   },
   { timestamps: true }
 );

@@ -3,8 +3,8 @@ import {
   bulkUploadQuestions,
   createQuestion,
   deleteQuestion,
-  getQuestion,
   getQuestionByCategory,
+  getQuestions,
   updateQuestion,
 } from "../controllers/questionController";
 import { Router } from "express";
@@ -16,7 +16,7 @@ const router = Router();
 
 router.post("/", createQuestion);
 router.post("/bulk", bulkUploadQuestions);
-router.get("/", getQuestion);
+router.get("/", getQuestions);
 router.get("/:categoryid", getQuestionByCategory);
 router.put("/:id", updateQuestion);
 router.delete("/:id", deleteQuestion);

@@ -27,6 +27,7 @@ export const register = async (req: Request, res: Response) => {
       },
       { new: true }
     );
+
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
@@ -97,4 +98,38 @@ export const logout = async (req: Request, res: Response) => {
   );
   res.clearCookie("refreshToken", { httpOnly: true, secure: true });
   res.status(200).json({ message: "logout successfully" }); //forbitten
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const { _id } = req.user.user;
+  try {
+    const user = await User.findById(_id).select(
+      "_id username fistname lastname email"
+    );
+    if (!user) {
+      res.status(400).json("user not found");
+    } else {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const updateUserById = async (req: Request, res: Response) => {
+  const { _id } = req.user.user;
+  try {
+    const user = await User.findById(_id);
+
+    if (!user) {
+      res.status(400).json("user not found");
+    } else {
+      const updateUser = await User.findByIdAndUpdate(_id, req.body, {
+        new: true,
+      });
+      res.status(200).json("updated successfully");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };

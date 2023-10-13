@@ -20,10 +20,35 @@ export const authMiddleware = (
     } else {
       let decoded: any = jwt.verify(tokens, process.env.SECRET_TOKEN || "");
       req.user = decoded;
+      console.log({ decoded });
 
       next();
     }
   } catch (err) {
     res.status(401).json("you are not authrized person");
+  }
+};
+
+export const isSuperAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token: any = req.headers.token;
+
+  try {
+    if (!token) {
+      res.status(401).json("you don't have token");
+    } else {
+      const decoded = jwt.verify(token, process.env.SECRET_TOKEN || "") as {
+        user: { role: string };
+      };
+
+      if (decoded && decoded.user.role === "superAdmin") {
+        next();
+      }
+    }
+  } catch (error) {
+    res.status(401).json("you don't have token");
   }
 };

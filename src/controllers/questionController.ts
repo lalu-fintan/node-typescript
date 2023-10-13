@@ -45,11 +45,14 @@ export const getQuestions = async (req: Request, res: Response) => {
 export const getQuestionByCategory = async (req: Request, res: Response) => {
   const { categoryid } = req.params;
   try {
-    const count = await Question.countDocuments();
-    const randomIndex = Math.floor(Math.random() * count);
-    const questions = await Question.findOne({ category: categoryid }).skip(
-      randomIndex
-    );
+    // const count = await Question.countDocuments();
+    // const randomIndex = Math.floor(Math.random() * count);
+    // const questions = await Question.find({ category: categoryid })
+    //   .limit(25)
+    //   .skip(randomIndex);
+
+    const questions = await Question.aggregate([{ $sample: { size: 25 } }]);
+    console.log(questions.length);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);
